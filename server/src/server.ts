@@ -1,44 +1,103 @@
 import express from "express";
+import cors from "cors";
+import { PrismaClient } from "@prisma/client"
+import { convertHourStringToMinutes } from "./utils/convert-hour-string-to-minutes";
+import { convertMinutesToHourString } from "./utils/convert-minutes-to-hours-string";
 
 const app = express();
-
-app.get("/games", (req, res) => {
-  return res.json([]);
+const prisma = new PrismaClient({
+  log: ["query"]
 });
 
-app.post("/ads", (req, res) => {
-  return res.status(201).json(["Post!"]);
+app.use(express.json());
+app.use(cors());
+
+app.get("/games",async (req, res) => {
+  const games = await prisma.game.findMany({
+    include: {
+      _count: {
+        select: {
+          ads: true
+        }
+      }
+    }
+  });
+  
+  return res.json(games);
 });
 
-app.get("/games/:id/ads", (req, res) => {
-  const { id } = req.params;
-  const frutas = [
-    { id: 1, name: "Cereja" },
-    { id: 2, name: "Maracujá" },
-    { id: 3, name: "Pêssego" },
-    { id: 3, name: "Laranja" }
-  ];
+app.post("/games/:id/ads", async (req, res) => {
+  const gameId = req.params.id;
+  const body : any = req.body;
 
-  const fruta = frutas.find((fruta) => fruta.id  === Number(id));
+  const ad = await prisma.ad.create({
+    data: {
+      gameId,
+      name: body.name,
+      yearPlaying: body.yearPlaying,
+      discord: body.discord,
+      weekDays: body.weekDays.join(","),
+      hourStart: convertHourStringToMinutes(body.hourStart),
+      hourEnd: convertHourStringToMinutes(body.hourEnd),
+      useVoiceChannel: body.useVoiceChannel
+    }
+  })
 
-  if (!fruta) {
-    return console.log("Registro não encontrado!");    
-  }
-
-  return res.json([fruta]);
+  return res.status(201).json(ad);
 });
 
-app.get("/ads", (req, res) => {
-  return res.json([
-    { id: 1, name: "Cereja" },
-    { id: 2, name: "Maracujá" },
-    { id: 3, name: "Pêssego" },
-    { id: 3, name: "Laranja" }
-  ]);
+app.get("/games/:id/ads", async (req, res) => {
+  const gameId = req.params.id;
+  
+  const ads = await prisma.ad.findMany({
+    select: {
+      id: true,
+      name: true,
+      weekDays: true,
+      useVoiceChannel: true,
+      yearPlaying: true,
+      hourStart: true,
+      hourEnd: true
+    },
+    where: {
+      gameId: gameId
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
+
+  return res.json(ads.map((ad) => {
+    return {
+      ...ad,
+      weekDays: ad.weekDays.split(","),
+      hourStart: convertMinutesToHourString(ad.hourStart),
+      hourEnd: convertMinutesToHourString(ad.hourEnd)
+    }
+
+  }));
 });
 
-app.get("/ads/:id/discord", (req, res) => {
-  return res.json(["discord"])
+app.get("/ads", async (req, res) => {
+  const ads = await prisma.ad.findMany();
+
+  return res.json(ads);
+});
+
+app.get("/ads/:id/discord", async (req, res) => {
+
+  const adId = req.params.id;
+
+  const ad = await prisma.ad.findUniqueOrThrow({
+    select: {
+      discord: true
+    },
+    where: {
+      id: adId
+    }
+  })
+
+  return res.json({ discord: ad.discord });
 });
 
 app.listen(3000, () => {
