@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { GameBanner } from "./components/GameBanner";
 import { CreateAdBanner } from "./components/CreateAdBanner";
 import logoImg from "./assets/logoe-sports.svg";
+import * as Dialog from "@radix-ui/react-dialog";
 
 import "./styles/main.css";
 
@@ -34,7 +35,6 @@ function App() {
       </h1>
 
       <div className="grid grid-cols-6 gap-6 mt-16">
-        {/* <GameBanner bannerUrl="/game-1.png" title="League of legends" adsCount={3} /> */}
 
         {
          games.length > 0 && games.map(game => (
@@ -48,7 +48,21 @@ function App() {
         }
       </div>
 
-      <CreateAdBanner />
+      <Dialog.Root>
+        <CreateAdBanner />
+
+        <Dialog.Portal>
+          <Dialog.Overlay className="bg-yellow-600/80 inset-0 fixed" />
+
+          <Dialog.Content className="fixed bg-[#2a2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Dialog.Title>Publique um anúncio</Dialog.Title>
+
+            <Dialog.Content>
+              algo hauhauhauahhahuahauhau
+            </Dialog.Content>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>  
 
     </div>
   )
