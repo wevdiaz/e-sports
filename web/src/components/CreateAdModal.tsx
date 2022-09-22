@@ -1,9 +1,28 @@
+import { useEffect, useState } from "react";
+
 import { Input } from "./Form/Input";
 import { GameController, Check } from "phosphor-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Checkbox from "@radix-ui/react-checkbox";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
+
+
+interface Games {
+  id: string;
+  title: string;  
+}
 
 export function CreateAdModal() {
+  const [games, setGames] = useState<Games[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/games")
+    .then(response => response.json())
+    .then((data) => {
+      setGames(data);
+    })
+  }, []);
+
   return (
     <Dialog.Portal>
         <Dialog.Overlay className="bg-black/60 inset-0 fixed" />
@@ -16,11 +35,11 @@ export function CreateAdModal() {
                 <label htmlFor="game" className="font-semibold">Qual o game?</label>
                 <select 
                     id="game" 
-                    placeholder="Selecione o game que deseja jogar"
-                    className="bg-zinc-900 py-5 px-4 rounded text-sm placeholder:text-zinc-500"
+                    className="bg-zinc-900 py-5 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none"
                 >
-
-                </select>
+                  <option disabled selected value="">Selecione o game que deseja jogar</option>
+                  { games.map((game) => ( <option key={game.id} value={game.id}>{game.title}</option>)) }
+                </select>                
               </div>
 
               <div className="flex flex-col gap-2">
@@ -45,48 +64,50 @@ export function CreateAdModal() {
                   <label htmlFor="weekDays">Quando costuma jogar?</label>
 
                   <div className="grid grid-cols-4 gap-1">
-                    <button 
-                      title="Domingo"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      D
-                    </button>
-                    <button 
-                      title="Segunda"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      S
-                    </button>
-                    <button 
-                      title="Terça"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      T
-                    </button>
-                    <button 
-                      title="Quarta"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      Q
-                    </button>
-                    <button 
-                      title="Quinta"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      Q
-                    </button>
-                    <button 
-                      title="Sexta"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      S
-                    </button>
-                    <button 
-                      title="Sábado"
-                      className="w-8 h-8 rounded bg-zinc-900"
-                    >
-                      S
-                    </button>
+                    <ToggleGroup.Root type="multiple">
+                      <button 
+                        title="Domingo"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        D
+                      </button>
+                      <button 
+                        title="Segunda"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        S
+                      </button>
+                      <button 
+                        title="Terça"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        T
+                      </button>
+                      <button 
+                        title="Quarta"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        Q
+                      </button>
+                      <button 
+                        title="Quinta"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        Q
+                      </button>
+                      <button 
+                        title="Sexta"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        S
+                      </button>
+                      <button 
+                        title="Sábado"
+                        className="w-8 h-8 rounded bg-zinc-900"
+                      >
+                        S
+                      </button>
+                    </ToggleGroup.Root>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
