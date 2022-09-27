@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import axios from "axios";
 
 import { Input } from "./Form/Input";
 import { GameController, Check } from "phosphor-react";
@@ -12,6 +13,7 @@ interface Games {
   title: string;  
 }
 
+
 export function CreateAdModal() {
 
   const [games, setGames] = useState<Games[]>([]);
@@ -19,23 +21,50 @@ export function CreateAdModal() {
   const [useVoiceChannel, setUseVoiceChannel] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/games")
-    .then(response => response.json())
-    .then((data) => {
-      setGames(data);
+    axios("http://localhost:3000/games")    
+    .then((response) => {
+      setGames(response.data);
     })
   }, []);
 
-  function handleCreateAd(event: FormEvent) {
+  async function handleCreateAd(event: FormEvent) {
     event.preventDefault();
     
     const formData = new FormData(event.target as HTMLFormElement);
     const data = Object.fromEntries(formData);
 
-    console.log(data);
+    const keys = Object.keys(data);
+
+    
+    for (let key of keys) {           
+
+      if (data[key] === "") {
+        alert("Preencha o campo restante");
+        return;
+      }      
+    }
+    
+    
+    try {
+      await axios.post(`http://localhost:3000/games/${data.game}/ads`, {
+        name: data.name,
+        yearPlaying: Number(data.yearPlaying),   
+        discord: data.discord,         
+        weekDays: weekdays.map(Number),        
+        hourStart: data.hourStart,       
+        hourEnd: data.hourEnd,
+        useVoiceChannel: useVoiceChannel
+      })
+
+      alert("Anúncio criado com sucesso!");
+    }catch (err) {
+      console.log(err);
+      alert("Erro ao criar anúncio!");
+    }
     
   }
 
+  
   return (
     <Dialog.Portal>
         <Dialog.Overlay className="bg-black/60 inset-0 fixed" />
@@ -64,7 +93,7 @@ export function CreateAdModal() {
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
-                  <Input id="yearsPlaying" name="yearsPlaying" type="number" placeholder="Pode ser zero" />
+                  <Input id="yearPlaying" name="yearPlaying" type="number" placeholder="Pode ser zero" />
                 </div>
 
                 <div className="flex flex-col gap-2">
