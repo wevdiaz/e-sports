@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 
 import { GameBanner } from "./components/GameBanner";
@@ -52,8 +53,9 @@ function App() {
       <Dialog.Root>
         <CreateAdBanner />
         <CreateAdModal />        
-      </Dialog.Root>  
-
+      </Dialog.Root>
+       
+        <ToastContainer autoClose={2000} />
     </div>
   )
 }

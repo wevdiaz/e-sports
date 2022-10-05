@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 import { Input } from "./Form/Input";
@@ -39,7 +40,7 @@ export function CreateAdModal() {
     for (let key of keys) {           
 
       if (data[key] === "") {
-        alert("Preencha o campo restante");
+        toast.error("Preencha os campos que falta");
         return;
       }      
     }
@@ -56,10 +57,10 @@ export function CreateAdModal() {
         useVoiceChannel: useVoiceChannel
       })
 
-      alert("Anúncio criado com sucesso!");
+      toast.success("Anúncio criado com sucesso!");
     }catch (err) {
       console.log(err);
-      alert("Erro ao criar anúncio!");
+      toast.error("Erro ao criar anúncio!");
     }
     
   }
