@@ -80,8 +80,9 @@ export function CreateAdModal() {
                     id="game" 
                     name="game"
                     className="bg-zinc-900 py-5 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none"
+                    defaultValue=""
                 >
-                  <option disabled  defaultValue="">Selecione o game que deseja jogar</option>
+                  <option disabled  value="">Selecione o game que deseja jogar</option>
                   { games.map((game) => ( <option key={game.id} value={game.id}>{game.title}</option>)) }
                 </select>                
               </div>
