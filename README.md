@@ -1,17 +1,15 @@
-# e-sports
-
 # E-Sports
 
 ***
 
 <p align="center">
-  <img src="https://github.com/wevdiaz/MoviesLib/blob/main/image/movielib_screen.png?raw=true">
+  <img src="https://github.com/wevdiaz/e-sports/blob/main/image/e-sports.png?raw=true">
 </p>
 
 ***
 
 <p align="center">  
-      <a>![GitHub repo size](https://img.shields.io/github/repo-size/wevdiaz/e-sports?color=%238e44ad)
+      <a>
           <img src="https://img.shields.io/github/repo-size/wevdiaz/e-sports?color=%238e44ad">      
       </a>  
       <a>
@@ -21,7 +19,7 @@
           <img src="https://img.shields.io/github/languages/count/wevdiaz/e-sports?color=%238e44ad">       
       </a>      
       <a>          
-          <img alt="Diazz" src="https://img.shields.io/badge/made%20by-Diazz-e-sports?color=%238e44ad"> 
+          <img alt="Diazz" src="https://img.shields.io/badge/made%20by-Diazz-esports?color=%238e44ad"> 
       </a>      
   </p> 
 
@@ -49,11 +47,27 @@ Projeto baseado na comunidade game, um modo de conectar com outros jogogadores e
 Para rodar a página
 
 * Baixe para sua máquina
-* npm install - *para dependência do projeto*
-* npm run dev - *para rodar aplicação*
+
+#### Server
+
+Crie um novo arquivo .env na raiz do projeto. Crie um banco de dados também local seguindo as instruções abaixo
+
+**npm install** -> para dependências
+
+**npm run db:migrate** => para o banco de dados
+
+**npm run dev** => para rodar a aplicação
+
+***
+
+#### Web
+
+**npm install** -> para dependências
+
+**npm run dev** -> para rodar a aplicação
 
 ### :scroll: Licença
 
-Esse projeto está sob a licença 
+Esse projeto está sob a licença [MIT](https://github.com/wevdiaz/e-sports/blob/main/LICENSE)
 
 Projeto sendo desenvolvido com :blue_heart:.
